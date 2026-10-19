@@ -12,7 +12,6 @@ class RequestMetadata(BaseModel):
 
     feature: str = Field(pattern=r"^[a-z0-9_-]{1,40}$")
 
-    # Unique id of this request. Used in logs, metrics, and the queue.
     request_id: str = Field(min_length=1, max_length=64)
 
     # "interactive": a user is waiting, so fail fast.

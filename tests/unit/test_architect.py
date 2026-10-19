@@ -6,7 +6,7 @@ ALLOWED_FILE = "litellm_client.py"
 
 
 def imports_litellm(path: Path) -> bool:
-    # Read the file as code and look at its import statements only
+    
     tree = ast.parse(path.read_text(encoding="utf-8"))
 
     for node in ast.walk(tree):
@@ -24,7 +24,7 @@ def imports_litellm(path: Path) -> bool:
 
 
 def test_litellm_used_only_in_client():
-    # Collect every file in app/ that imports litellm
+    
     offenders = [
         str(file)
         for file in Path("app").rglob("*.py")

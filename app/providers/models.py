@@ -4,7 +4,6 @@ from pydantic import BaseModel, SecretStr
 class Provider(BaseModel):
     # Settings of one provider. They never change while the app runs.
     # Live state (breaker, health) is stored in Redis
-
     name: str              
     model: str              
     api_key: SecretStr     
@@ -13,8 +12,6 @@ class Provider(BaseModel):
 
 
 class CallResult(BaseModel):
-    # What one successful provider call returns
-
     provider: str
     model: str
     content: str                       

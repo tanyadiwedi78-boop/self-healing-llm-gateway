@@ -41,7 +41,8 @@ def load_prices():
     global prices, loaded
     if not loaded:
         prices = read_price_file()
-        loaded = True
+        if prices:
+            loaded = True
     return prices
 
 
