@@ -1,0 +1,52 @@
+# ---------- Build system (lets pip install the project) ----------
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# ---------- Project information ----------
+[project]
+name = "self-healing-llm-gateway"
+version = "0.1.0"
+description = "LLM gateway with health tracking, circuit breaking, failover, and queueing"
+requires-python = ">=3.10"
+
+# Libraries the gateway needs to run
+dependencies = [
+    "fastapi>=0.110",             # web framework (routers, middleware)
+    "uvicorn[standard]>=0.27",    # server that runs FastAPI
+    "pydantic>=2.5",              # request and response models
+    "pydantic-settings>=2.1",     # settings from .env
+    "litellm",                    # translator for provider calls (one file only)
+    "httpx>=0.27",                # HTTP client (demo client, scripts, tests)
+    "redis>=5.0",                 # health windows, breaker state, queue (Phase 2+)
+    "prometheus-client>=0.19",    # /metrics endpoint (Phase 2+)
+]
+
+# Extra libraries only needed while developing
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",                # test runner
+    "ruff>=0.4",                  # code checker and formatter
+]
+
+# Packages that belong to this project
+[tool.setuptools.packages.find]
+include = ["app*", "client*", "chaos*"]
+
+# ---------- Pytest ----------
+[tool.pytest.ini_options]
+pythonpath = ["."]                # lets tests import "app"
+testpaths = ["tests"]             # plain "pytest" looks only in tests/
+markers = [
+    "integration: needs Redis or other running services",
+    "resilience: outage and recovery scenarios",
+]
+
+# ---------- Ruff (style checker) ----------
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]          # style errors, unused code, import order
+ignore = ["E501"]                 # long lines are allowed (log messages are long)
