@@ -5,14 +5,14 @@ from contextvars import ContextVar
 
 from app.core.config import get_settings
 
-# A ContextVar is a variable that keeps a separate value for each request.
-# middleware/request_id.py sets it, and every log line then shows it.
+
+# middleware/request_id.py sets 
 request_id_var = ContextVar("request_id", default="-")
 
 # The layout of one log line in normal (readable) mode.
 TEXT_FORMAT = "%(asctime)s %(levelname)s [%(request_id)s] %(name)s: %(message)s"
 
-# These libraries print a lot at INFO level, so we only show their warnings.
+
 NOISY_LOGGERS = ["LiteLLM", "litellm", "httpx", "httpcore"]
 
 

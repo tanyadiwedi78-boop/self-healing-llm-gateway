@@ -34,6 +34,17 @@ class Settings(BaseSettings):
 
     enable_mock_provider: bool = False
 
+    #----------- logging ----------------------------
+    log_json: bool = Field(
+        default=False,
+        description = "true = JSON log lines , false = readable text"
+    )
+
+    log_level: str = Field(
+        default = "INFO" , 
+        description = "DEBUG , INFO , WARNING , ERROR"
+    )
+
 
     
 
