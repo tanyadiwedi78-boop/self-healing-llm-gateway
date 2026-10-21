@@ -96,3 +96,29 @@ Redis State & Sliding Window Health Tracker (`app/storage/`)
 Circuit Breaker & Fallback Engine
 
 
+
+
+
+1. Circuit Breaker: Use a "Sliding Window" instead of Simple Counter
+
+• What most beginners do: Open the circuit breaker if 5 absolute errors happen in a row.
+• The Engineer Move: If Groq handles 10,000 requests a minute, 5 sequential errors might just be random network blips. Instead, implement a Time-Based Sliding Window. Keep track of the error rate over the last 30 seconds (e.g., if the error rate crosses 15% of total traffic, then trip the circuit to OPEN). This keeps your primary high-speed provider online longer during brief network jitters.
+
+2. Streaming Fallbacks: Protect User Experience
+
+• What most beginners do: Wait for a blocking, complete non-streamed text payload to fail before triggering a fallback.
+• The Engineer Move: If your client apps are utilizing token streaming (stream=True for chat interfaces), your gateway must handle streaming fallback cleanly. If Groq drops its connection halfway through generation (e.g., at token #45), your loop layer needs to capture that, open a connection to Gemini, pass the message history plus the generated 45 tokens, and tell the fallback provider to continue writing from there seamlessly.
+
+3. Chaos Engineering: Automate Failure Scenarios
+
+• What most beginners do: Test the fallback code by manually changing a URL string to be invalid.
+• The Engineer Move: Build an automated /chaos/inject endpoint into your app/ files. When toggled, it deliberately drops 30% of incoming connections, injects artificial 429 Too Many Requests status codes, or spins up high latency (e.g., a 12-second delay). Showing that your Grafana dashboard registers these chaos injections and your gateway automatically self-heals by cleanly failing over is a massive talking point during interview stages.
+
+4. Redis Async Connection Pooling
+
+• What most beginners do: Open and close Redis sessions on every HTTP query.
+• The Engineer Move: Use strict ConnectionPool handling within an asyncio loop lifecycle context manager (lifespan in FastAPI). This prevents connection leaks when handling concurrent traffic from both of your application clients at the same time.
+
+
+
+
