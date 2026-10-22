@@ -115,3 +115,10 @@ class ProviderModelNotFoundError(ProviderError):
     # Model name is wrong or retired (HTTP 404)
     error_type = "model_not_found"
     retryable = False
+
+
+class InvalidMetadataError(GatewayError):
+    http_status = 400
+    error_type = "invalid_metadata"
+
+

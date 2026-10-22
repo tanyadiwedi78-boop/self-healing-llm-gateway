@@ -46,6 +46,15 @@ class Settings(BaseSettings):
     )
 
 
+    # ---------- Request limits (guardrails) ----------
+    max_messages: int = 50              # most messages allowed in one request
+    max_request_chars: int = 50_000     # most total characters allowed in one request
+
+    # ---------- Safety switches ----------
+    enable_docs: bool = True            # /docs page; must be False in production
+    enable_chaos: bool = False          # chaos switch; must be False in production
+
+
     
 
     # ---------- Default models (LiteLLM format: "provider/model") ----------
